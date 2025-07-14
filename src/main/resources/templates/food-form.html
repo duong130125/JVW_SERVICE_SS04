@@ -16,7 +16,11 @@
 
     Category:
     <select th:field="*{category}" required>
-        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat.categoryName}"></option>
+        <option th:each="cat : ${categories}"
+                th:value="${cat.id}"
+                th:text="${cat.categoryName}"
+                th:selected="${foodItem.category != null and foodItem.category.id == cat.id}"
+        ></option>
     </select><br/>
 
     <button type="submit">Save</button>

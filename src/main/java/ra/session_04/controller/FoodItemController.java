@@ -4,10 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import ra.session_04.entity.Category;
 import ra.session_04.entity.FoodItem;
 import ra.session_04.repository.CategoryRepository;
 import ra.session_04.service.FoodItemService;
+
+import java.beans.PropertyEditorSupport;
 
 @Controller
 @RequestMapping("/foods")
@@ -57,5 +61,17 @@ public class FoodItemController {
     public String delete(@PathVariable Long id) {
         foodItemService.delete(id);
         return "redirect:/foods";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Category.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                Long id = Long.parseLong(text);
+                Category category = categoryRepository.findById(id).orElse(null);
+                setValue(category);
+            }
+        });
     }
 }
