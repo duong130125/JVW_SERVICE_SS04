@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2 th:text="${foodItem.id == null ? 'Add Food Item' : 'Update Food Item'}"></h2>
+
+<form th:action="@{/foods/save}" th:object="${foodItem}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    Name: <input type="text" th:field="*{name}" required/><br/>
+    Price: <input type="number" th:field="*{price}" step="0.01" required/><br/>
+    Expiration Date: <input type="date" th:field="*{expirationDate}" required/><br/>
+
+    Category:
+    <select th:field="*{category}" required>
+        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat.categoryName}"></option>
+    </select><br/>
+
+    <button type="submit">Save</button>
+</form>
+
+<a th:href="@{/foods}">Back</a>
+</body>
+</html>

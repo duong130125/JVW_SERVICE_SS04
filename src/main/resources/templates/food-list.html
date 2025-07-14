@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Food Inventory</h1>
+
+<form method="get">
+  <input type="text" name="name" placeholder="Search by name" th:value="${name}" />
+  <select name="categoryId">
+    <option value="0">All Categories</option>
+    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.categoryName}"
+            th:selected="${categoryId == cat.id}"></option>
+  </select>
+  <button type="submit">Search</button>
+</form>
+
+<a th:href="@{/foods/new}">Add New Food</a>
+
+<table border="1">
+  <tr>
+    <th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Expiration</th><th>Action</th>
+  </tr>
+  <tr th:each="f : ${foods.content}">
+    <td th:text="${f.id}"></td>
+    <td th:text="${f.name}"></td>
+    <td th:text="${f.category.categoryName}"></td>
+    <td th:text="${f.price}"></td>
+    <td th:text="${f.expirationDate}"></td>
+    <td>
+      <a th:href="@{'/foods/edit/' + ${f.id}}">Edit</a>
+      <form th:action="@{'/foods/delete/' + ${f.id}}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
+<!-- Phân trang -->
+<div>
+    <span th:if="${foods.hasPrevious()}">
+        <a th:href="@{/foods(page=${foods.number - 1}, name=${name}, categoryId=${categoryId})}">Previous</a>
+    </span>
+  <span th:each="i : ${#numbers.sequence(0, foods.totalPages - 1)}">
+        <a th:href="@{/foods(page=${i}, name=${name}, categoryId=${categoryId})}"
+           th:text="${i + 1}"
+           th:classappend="${i == foods.number} ? 'active-page' : ''"
+           style="margin: 0 5px;"></a>
+    </span>
+  <span th:if="${foods.hasNext()}">
+        <a th:href="@{/foods(page=${foods.number + 1}, name=${name}, categoryId=${categoryId})}">Next</a>
+    </span>
+</div>
+
+</body>
+</html>

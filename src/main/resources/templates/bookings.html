@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Your Bookings</h2>
+<div th:each="b : ${bookings}">
+    <p><strong>Flight:</strong> [[${b.flight.flightNumber}]]</p>
+    <p>Status: [[${b.status}]]</p>
+    <p>Time: [[${b.bookingTime}]]</p>
+    <a th:href="@{'/bookings/cancel/' + ${b.id}}"
+       th:if="${b.status.name() == 'BOOKED'}">Cancel</a>
+    <hr/>
+</div>
+</body>
+</html>

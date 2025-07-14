@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Flight List</h1>
+
+<form method="get">
+    <input type="text" name="departure" placeholder="From..." th:value="${departure}" />
+    <input type="text" name="destination" placeholder="To..." th:value="${destination}" />
+    <button type="submit">Search</button>
+</form>
+
+<div th:each="flight : ${flights.content}">
+    <p><strong>Flight:</strong> [[${flight.flightNumber}]]</p>
+    <p>[[${flight.departure}]] → [[${flight.destination}]]</p>
+    <p>Price: $[[${flight.price}]]</p>
+    <a th:href="@{'/bookings/new/' + ${flight.id}}">Book Ticket</a>
+    <hr/>
+</div>
+
+<!-- ⬇ PHÂN TRANG -->
+<div style="margin-top: 20px;">
+    <span th:if="${flights.hasPrevious()}">
+        <a th:href="@{/flights(page=${flights.number - 1}, departure=${departure}, destination=${destination})}">Previous</a>
+    </span>
+
+    <span th:each="i : ${#numbers.sequence(0, flights.totalPages - 1)}">
+        <a th:href="@{/flights(page=${i}, departure=${departure}, destination=${destination})}"
+           th:text="${i + 1}"
+           th:classappend="${i == flights.number} ? 'active-page' : ''"
+           style="margin: 0 5px;"></a>
+    </span>
+
+    <span th:if="${flights.hasNext()}">
+        <a th:href="@{/flights(page=${flights.number + 1}, departure=${departure}, destination=${destination})}">Next</a>
+    </span>
+</div>
+
+<!-- Optional CSS -->
+<style>
+    .active-page {
+        font-weight: bold;
+        color: red;
+    }
+</style>
+</body>
+</html>

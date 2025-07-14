@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
@@ -26,5 +24,5 @@ public class Book {
     @Column(nullable = false, length = 50)
     private String publisher;
     @Column(nullable = false)
-    private LocalDateTime year;
+    private int year;
 }
